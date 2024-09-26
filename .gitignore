@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Ignorar o arquivo ScreensoundContext.cs na pasta Banco
+ScreenSound.Shared.Dados/Banco/ScreenSoundContext.cs

@@ -17,6 +17,9 @@
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Style="background-color: #a79efc;">
                 Voltar
             </MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="Editar">
+                Salvar
+            </MudButton>
             <MudButton Variant="Variant.Filled" @onclick="Deletar" Color="Color.Secondary">
                 Deletar
             </MudButton>
@@ -30,6 +33,12 @@
     [Parameter]
     public string? NomeArtista { get; set; }
     public ArtistaResponse? Artista { get; set; }
+    private async Task Editar()
+    {
+        var requestEdit = new ArtistaRequestEdit(Artista.Id!, nome!, biografia!);
+        await artistaApi.UpdateArtistaAsync(requestEdit);
+        navigationManager.NavigateTo("/Artistas");
+    }
     private async Task Deletar()
     {
         await artistaApi.DeleteArtistaAsync(Artista.Id);

@@ -8,6 +8,10 @@ div.mud-main-content.main-content {
     min-height: 100vh;
 }
 
+.mud-file-upload {
+    display: block !important;
+}
+
 h1:focus {
     outline: none;
 }

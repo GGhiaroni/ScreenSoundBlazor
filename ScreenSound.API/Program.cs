@@ -27,7 +27,7 @@ builder.Services.AddCors();
 
 var app = builder.Build();
 
-// **Coloque UseCors antes de UseRouting, UseAuthorization e outros middlewares**
+
 app.UseCors(options =>
 {
     options.AllowAnyOrigin()
@@ -35,7 +35,9 @@ app.UseCors(options =>
            .AllowAnyHeader();
 });
 
-app.UseRouting(); // Certifique-se de que UseRouting está aqui
+app.UseRouting();
+
+app.UseStaticFiles();
 
 app.AddEndPointsArtistas();
 app.AddEndPointsMusicas();

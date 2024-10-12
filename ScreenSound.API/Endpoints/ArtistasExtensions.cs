@@ -36,8 +36,8 @@ public static class ArtistasExtensions
 
         app.MapPost("/Artistas", async ([FromServices] IHostEnvironment env, [FromServices] DAL<Artista> dal, [FromBody] ArtistaRequest artistaRequest) =>
         {
-            var nome = artistaRequest.nome.Trim();
-            var imagemArtista = DateTime.Now.ToString("ddMMyyyyhhss") + "." + nome + ".jpeg";
+            var nome = artistaRequest.nome.Trim().Replace(" ", "");
+            var imagemArtista = DateTime.Now.ToString("ddMMyyyyhhss") + "." + "Foto" + nome + ".jpeg";
 
             var path = Path.Combine(env.ContentRootPath,
                 "wwwroot", "FotosPerfil", imagemArtista);

@@ -14,7 +14,8 @@
             @bind-Value="biografia" Lines="4" Required="true" RequiredError="Campo obrigatório." />
 
         <div class="d-flex justify-end mt-4" style="gap: 8px;">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Style="background-color: #a79efc;">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="VoltarParaListagem"
+                Style="background-color: #a79efc;">
                 Voltar
             </MudButton>
             <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="Editar">
@@ -30,25 +31,33 @@
 @code {
     private string? nome;
     private string? biografia;
-    private string? fotoPerfil;
     [Parameter]
     public string? NomeArtista { get; set; }
+
     public ArtistaResponse? Artista { get; set; }
-    private async Task Editar()
-    {
-        var requestEdit = new ArtistaRequestEdit(Artista.Id!, nome!, biografia!, fotoPerfil);
-        await artistaApi.UpdateArtistaAsync(requestEdit);
-        navigationManager.NavigateTo("/Artistas");
-    }
-    private async Task Deletar()
-    {
-        await artistaApi.DeleteArtistaAsync(Artista.Id);
-        navigationManager.NavigateTo("/Artistas");
-    }
+
     protected override async Task OnInitializedAsync()
     {
         Artista = await artistaApi.GetArtistaPorNomeAsync(NomeArtista!);
-        nome = Artista.Nome;
-        biografia = Artista.Bio;
+        nome = Artista!.Nome;
+        biografia = Artista!.Bio;
+    }
+
+    private async Task Deletar()
+    {
+        await artistaApi.DeleteArtistaAsync(Artista!.Id);
+        navigationManager.NavigateTo("/Artistas");
+    }
+
+    private async Task Editar()
+    {
+        var requestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!, Artista!.FotoPerfil);
+        await artistaApi.UpdateArtistaAsync(requestEdit);
+        navigationManager.NavigateTo("/Artistas");
+    }
+
+    private void VoltarParaListagem()
+    {
+        navigationManager.NavigateTo("/Artistas");
     }
 }

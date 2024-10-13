@@ -6,3 +6,4 @@ public record GeneroResponse(int Id, string Nome, string Descricao)
         return $"{this.Nome}";
     }
 }
+

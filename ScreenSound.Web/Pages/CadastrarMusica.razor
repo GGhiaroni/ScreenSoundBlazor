@@ -2,6 +2,7 @@
 @inject ArtistaAPI artistaApi
 @inject GeneroAPI generoApi
 @inject MusicaAPI musicaApi
+@inject NavigationManager navigationManager
 
 <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
@@ -23,7 +24,7 @@
             }
         </MudSelect>
 
-        <MudTextField Class="mt-4" T="string" Placeholder="Ano de lançamento" @bind-Value="anoLancamento"
+        <MudNumericField Class="mt-4" Placeholder="Ano de lançamento" @bind-Value="anoLancamento"
             Variant="Variant.Outlined" Lines="1" Required="true" RequiredError="Campo obrigatório." />
 
         <MudSelect Class="mt-4" T="GeneroResponse" Label="Gêneros" Variant="Variant.Filled"
@@ -45,10 +46,10 @@
         </MudSelect>
 
         <div class="d-flex align-center justify-space-between mt-4">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="Cadastrar">
                 Cadastrar
             </MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-3">
+            <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-3" @onclick="Voltar">
                 Voltar
             </MudButton>
         </div>
@@ -61,7 +62,7 @@
 @code {
     private string? nome;
     private string? nomeArtista;
-    private string? anoLancamento;
+    private int anoLancamento;
     private ICollection<ArtistaResponse>? Artistas { get; set; }
     private ICollection<GeneroResponse>? Generos { get; set; }
     private List<GeneroResponse>? GenerosSelecionados { get; set; } = new();
@@ -84,5 +85,24 @@
                 GenerosSelecionados.Add(genero);
             }
         }
+    }
+    private List<GeneroRequest> GenerosRequest { get; set; } = new();
+    public async Task Cadastrar()
+    {
+        @if (GenerosSelecionados is not null)
+        {
+            foreach (var genero in GenerosSelecionados)
+            {
+                GenerosRequest.Add(new GeneroRequest(genero.Nome, genero.Descricao));
+            }
+        }
+
+        var musicaRequest = new MusicaRequest(nome!, ArtistaDaMusica!.Id, anoLancamento, GenerosRequest);
+        await musicaApi.AddMusicaAsync(musicaRequest);
+        navigationManager.NavigateTo("/MusicasPorArtistas");
+    }
+    private void Voltar()
+    {
+        navigationManager.NavigateTo("/Artistas");
     }
 }

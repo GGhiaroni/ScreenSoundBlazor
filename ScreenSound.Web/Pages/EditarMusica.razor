@@ -46,12 +46,16 @@
             }
         </MudSelect>
 
-        <div class="d-flex align-center justify-space-between mt-4">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="Deletar">
-                Deletar
-            </MudButton>
-            <MudButton Variant="Variant.Filled" Color="Color.Info" Class="ml-3" @onclick="Voltar">
+        <div class="d-flex justify-end mt-4" style="gap: 8px;">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" @onclick="Voltar"
+                Style="background-color: #a79efc;">
                 Voltar
+            </MudButton>
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" @onclick="Editar">
+                Salvar
+            </MudButton>
+            <MudButton Variant="Variant.Filled" @onclick="Deletar" Color="Color.Secondary">
+                Deletar
             </MudButton>
         </div>
 
@@ -96,6 +100,12 @@
     public async Task Deletar()
     {
         await musicaApi.DeleteMusicaAsync(Musica!.Id);
+        navigationManager.NavigateTo("/MusicasPorArtista");
+    }
+    public async Task Editar()
+    {
+        var requestMusicaEdit = new MusicaRequestEdit(Musica!.Id, nome!, ArtistaDaMusica!.Id, anoLancamento);
+        await musicaApi.UpdateMusicaAsync(requestMusicaEdit);
         navigationManager.NavigateTo("/MusicasPorArtista");
     }
     private void Voltar()
